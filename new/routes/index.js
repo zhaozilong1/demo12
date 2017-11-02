@@ -33,5 +33,13 @@ router.post("/zeng",function (req,res,next) {
         res.send(rows)
     })
 })
+router.post("/del",function (req,res,next) {
+    res.header("Access-Control-Allow-Origin","*")
+    var id = req.body.id;
+    console.log(id)
+    con.query(`DELETE FROM news1 WHERE id=${id}`,function (err,rows) {
+        res.send(rows)
+    })
+})
 
 module.exports = router;

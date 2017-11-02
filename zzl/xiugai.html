@@ -7,6 +7,7 @@
     <script>
         $(function () {
             var _th_id = "";
+
             $.ajax({
                 url:"http://localhost:3000/list",
                 type:"POST",
@@ -14,30 +15,46 @@
                     for(var i in e){
                         $(".tet").append("<h3><i>"+e[i].title+"</i><a href='#' th_id='"+e[i].id+"'>修改</a><span th_id='"+e[i].id+"'>删除</span></h3>")
                     }
-                    $("a").click(function () {
-                        $(".box").show()
-                        _th_id = $(this).attr("th_id")
-                        console.log(_th_id)
-                        return _th_id
-                    })
                 }
+            })
+            $(".tet").on("click","a",function () {
+                $(".box").show()
+                _th_id = $(this).attr("th_id")
+                console.log(_th_id)
+                return _th_id
             })
             $(".box_btn").click(function () {
                 console.log(_th_id)
 //                console.log($(".title").val())
-                $.ajax({
-                    url:"http://localhost:3000/xiugai",
-                    type:"POST",
-                    data:{
-                        a:$(".title").val(),
-                        b:$(".content").val(),
-                        id:_th_id
-                    },
-                    success:function (e) {
+                if($(".title").val() == "" || $(".content").val() == ""){
+                    alert("输入框不能为空")
+                }else{
+                    $.ajax({
+                        url:"http://localhost:3000/xiugai",
+                        type:"POST",
+                        data:{
+                            a:$(".title").val(),
+                            b:$(".content").val(),
+                            id:_th_id
+                        },
+                        success:function (e) {
+                            $.ajax({
+                                url: "http://localhost:3000/list",
+                                type: "POST",
+                                success: function (e) {
+                                    var str = ""
+                                    for (var i in e) {
+                                        str+="<h3><i>" + e[i].title + "</i><a href='#' th_id='" + e[i].id + "'>修改</a><span th_id='" + e[i].id + "'>删除</span></h3>"
+                                    }
+                                    $(".tet").html(str)
+                                }
+                            })
+                        }
+                    })
+                    $(".box").hide()
+                }
 
-                    }
-                })
-                $(".box").hide()
+
             })
             $(".m_btn").click(function () {
                 if($(".title1").val() == "" || $(".content1").val() == ""){
@@ -60,6 +77,29 @@
                 }
 
 
+            })
+            $(".tet").on("click","span",function () {
+                var this_i = $(this).attr("th_id")
+                $.ajax({
+                    url:"http://localhost:3000/del",
+                    type:"POST",
+                    data:{
+                        id:this_i
+                    },
+                    success:function (e) {
+                        $.ajax({
+                            url: "http://localhost:3000/list",
+                            type: "POST",
+                            success: function (e) {
+                                var str = ""
+                                for (var i in e) {
+                                    str+="<h3><i>" + e[i].title + "</i><a href='#' th_id='" + e[i].id + "'>修改</a><span th_id='" + e[i].id + "'>删除</span></h3>"
+                                }
+                                $(".tet").html(str)
+                            }
+                        })
+                    }
+                })
             })
 
 
