@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery-1.11.3.min.js"></script>
+    <script>
+        $(function () {
+            $.ajax({
+                url:"http://localhost:3000/list",
+                type:"POST",
+                success:function (e) {
+                    for(var i in e){
+                        $("body").append("<h3><a href='#'>"+e[i].title+"</a></h3>")
+                    }
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+
+</body>
+</html>

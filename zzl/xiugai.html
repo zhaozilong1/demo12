@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery-1.11.3.min.js"></script>
+    <script>
+        $(function () {
+            var _th_id = "";
+            $.ajax({
+                url:"http://localhost:3000/list",
+                type:"POST",
+                success:function (e) {
+                    for(var i in e){
+                        $(".tet").append("<h3><i>"+e[i].title+"</i><a href='#' th_id='"+e[i].id+"'>修改</a><span th_id='"+e[i].id+"'>删除</span></h3>")
+                    }
+                    $("a").click(function () {
+                        $(".box").show()
+                        _th_id = $(this).attr("th_id")
+                        console.log(_th_id)
+                        return _th_id
+                    })
+                }
+            })
+            $(".box_btn").click(function () {
+                console.log(_th_id)
+//                console.log($(".title").val())
+                $.ajax({
+                    url:"http://localhost:3000/xiugai",
+                    type:"POST",
+                    data:{
+                        a:$(".title").val(),
+                        b:$(".content").val(),
+                        id:_th_id
+                    },
+                    success:function (e) {
+
+                    }
+                })
+                $(".box").hide()
+            })
+            $(".m_btn").click(function () {
+                if($(".title1").val() == "" || $(".content1").val() == ""){
+                    alert("输入框不能为空")
+                }else{
+                    $.ajax({
+                        url:"http://localhost:3000/zeng",
+                        type:"POST",
+                        data:{
+                            a:$(".title1").val(),
+                            b:$(".content1").val()
+                        },
+                        success:function (e) {
+                            console.log(e)
+                            $(".tet").append("<h3><i>"+$(".title1").val()+"</i><a href='#' th_id='"+e.insertId+"'>修改</a><span th_id='"+e.insertId+"'>删除</span></h3>")
+                            $(".title1").val("")
+                            $(".content1").val("")
+                        }
+                    })
+                }
+
+
+            })
+
+
+
+        })
+    </script>
+    <style>
+        i{
+            display: inline-block;
+            width: 500px;
+        }
+        a,span{
+            margin-left: 100px;
+        }
+        .box{
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: white;
+            display: none;
+            border: 1px solid #1c70e9;
+            left: 20%;
+            top:20%;
+        }
+    </style>
+</head>
+<body>
+<div class="m">
+    <input type="text" placeholder="title" class="title1">
+    <input type="text" placeholder="content" class="content1">
+    <button class="m_btn">提交</button>
+</div>
+    <div class="box">
+        <input type="text" placeholder="title" class="title">
+        <input type="text" placeholder="content" class="content">
+        <button class="box_btn">提交</button>
+    </div>
+<div class="tet">
+
+</div>
+</body>
+</html>
